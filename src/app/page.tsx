@@ -1,7 +1,9 @@
+'use client'
 import Link from 'next/link'
 import Footer from '@/components/Footer'
 import PortfolioCard from '@/components/PortfolioCard'
 import ContactForm from '@/components/ContactForm'
+import { useState } from 'react'
 
 const services = [
   {
@@ -99,6 +101,42 @@ const steps = [
   },
 ]
 
+const testimonials = [
+  {
+    name: 'Marcus Rodriguez',
+    role: 'Owner, Dynamic Plumbers Inglewood',
+    quote: 'Got our site live in 5 days. The next week we had 3 new calls from Google. Best $800 I ever spent on marketing.',
+    initials: 'MR',
+    color: '#3b82f6',
+    stars: 5,
+  },
+  {
+    name: 'Keisha Thomas',
+    role: 'Stylist, The Hair Parlor on 8th',
+    quote: 'I was skeptical about getting a website but NuPeeks made it painless. It looks more professional than salons 10× my size.',
+    initials: 'KT',
+    color: '#ec4899',
+    stars: 5,
+  },
+  {
+    name: 'James Park',
+    role: 'Owner, Speedy Plumbing and Heating',
+    quote: 'They delivered exactly what they promised. Clean, fast site that ranks in my city. Unlimited revisions until I was happy.',
+    initials: 'JP',
+    color: '#f59e0b',
+    stars: 5,
+  },
+]
+
+const faqs = [
+  { q: 'How long does it take to build my site?', a: 'Most sites are live within 5–7 business days of receiving your info. Simpler sites can be done in 3 days.' },
+  { q: 'What do you need from me?', a: 'Just fill out our contact form with your business name, city, niche, and any content you have. We handle the rest — design, copy, and launch.' },
+  { q: 'What if I don\'t like the design?', a: 'We offer unlimited revisions until you\'re completely happy. We don\'t consider the project done until you love it.' },
+  { q: 'Do I need to pay monthly?', a: 'No. The $800 site build is a one-time fee. The only optional recurring service is our $199/month SEO blog content subscription.' },
+  { q: 'Will my site rank on Google?', a: 'Our sites are built mobile-first with proper structure, meta tags, and page speed optimization — all the fundamentals Google cares about. SEO blog content (sold separately) accelerates ranking.' },
+  { q: 'Do you work outside of Los Angeles?', a: 'Our portfolio is LA-based, but we build sites for businesses anywhere. We just know LA best.' },
+]
+
 const categories = [
   {
     cat: 'Plumbers',
@@ -150,7 +188,20 @@ const categories = [
   },
 ]
 
+function StarRating({ count }: { count: number }) {
+  return (
+    <div style={{ display: 'flex', gap: 2 }}>
+      {Array.from({ length: count }).map((_, i) => (
+        <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
+      ))}
+    </div>
+  )
+}
+
 export default function Home() {
+  const [openFaq, setOpenFaq] = useState<number | null>(null)
   return (
     <>
       {/* Hero */}
@@ -310,6 +361,80 @@ export default function Home() {
               }}>
                 <div style={{ color: '#3b82f6' }}>{c.icon}</div>
                 <div style={{ fontSize: 13, color: '#9ca3af', fontWeight: 600 }}>{c.cat}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Testimonials */}
+      <section id="testimonials">
+        <span className="label">What Clients Say</span>
+        <h2 style={{ marginBottom: 16 }}>Real results.<br />Real businesses.</h2>
+        <p style={{ color: '#6b7280', fontSize: 18, maxWidth: 560, marginBottom: 64, lineHeight: 1.7 }}>
+          Don't take our word for it — hear from the local business owners we've worked with.
+        </p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
+          {testimonials.map((t, i) => (
+            <div key={t.name} className={`card animate-fade-up delay-${(i + 1) * 100}`} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <StarRating count={t.stars} />
+              <p style={{ color: '#d1d5db', lineHeight: 1.75, fontSize: 15, flex: 1, fontStyle: 'italic' }}>
+                &ldquo;{t.quote}&rdquo;
+              </p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 'auto' }}>
+                <div style={{
+                  width: 40, height: 40, borderRadius: '50%',
+                  background: t.color + '22', border: `1px solid ${t.color}44`,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontWeight: 800, fontSize: 13, color: t.color, flexShrink: 0,
+                }}>
+                  {t.initials}
+                </div>
+                <div>
+                  <div style={{ fontWeight: 700, fontSize: 14, color: '#f0f0f0' }}>{t.name}</div>
+                  <div style={{ fontSize: 12, color: '#6b7280', marginTop: 2 }}>{t.role}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <div style={{ background: '#111', borderTop: '1px solid #1a1a1a', borderBottom: '1px solid #1a1a1a' }}>
+        <div style={{ maxWidth: 760, margin: '0 auto', padding: '88px 24px' }}>
+          <div style={{ textAlign: 'center', marginBottom: 56 }}>
+            <span className="label">FAQ</span>
+            <h2 style={{ marginBottom: 16 }}>Common questions,<br />straight answers.</h2>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {faqs.map((faq, i) => (
+              <div key={faq.q} style={{
+                background: '#1a1a1a', border: '1px solid #222',
+                borderRadius: 12, overflow: 'hidden',
+                transition: 'border-color 0.2s',
+                ...(openFaq === i ? { borderColor: 'rgba(59,130,246,0.3)' } : {}),
+              }}>
+                <button
+                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                  style={{
+                    width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                    padding: '18px 24px', background: 'none', border: 'none', cursor: 'pointer',
+                    color: '#f0f0f0', fontWeight: 600, fontSize: 15, textAlign: 'left', gap: 16,
+                    minHeight: 56,
+                  }}
+                >
+                  <span>{faq.q}</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                    style={{ flexShrink: 0, transition: 'transform 0.2s', transform: openFaq === i ? 'rotate(180deg)' : 'none' }}>
+                    <polyline points="6 9 12 15 18 9"/>
+                  </svg>
+                </button>
+                {openFaq === i && (
+                  <div style={{ padding: '0 24px 20px', color: '#9ca3af', lineHeight: 1.7, fontSize: 14 }}>
+                    {faq.a}
+                  </div>
+                )}
               </div>
             ))}
           </div>
